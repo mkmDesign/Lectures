@@ -20,7 +20,7 @@
 {
     [super windowDidLoad];
     [_editNoteTitle setStringValue:[noteToEdit title]];
-    _editNoteContent.string = [[noteToEdit content] attributedString];
+    [[_editNoteContent textStorage] setAttributedString:[noteToEdit content]];
 }
 
 -(id)initWithWindowNibName:nibName{

@@ -79,14 +79,9 @@
         [NSApp endSheet:[self window]];
         [[self window] orderOut:sender];
         
-        // Get current no of subjects
-        /*NSUInteger noOfSubjects = [[self _childrenForItem:@"SUBJECT"] count];
-        noOfSubjects++;*/
-        
-        // TODO: Select newly added Subject
-        
-        // Automatically select first Subject in the sidebar
-        [[appDel sidebarOutlineView] selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+        // Automatically select the newly added Subject
+        NSUInteger noOfSubjects = [[appDel subjectsArray] count];
+        [[appDel sidebarOutlineView] selectRowIndexes:[NSIndexSet indexSetWithIndex:noOfSubjects] byExtendingSelection:NO];
         
     }
 }

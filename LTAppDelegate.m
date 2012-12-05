@@ -77,10 +77,6 @@
     // Automatically select first Subject in the sidebar
     [_sidebarOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
     
-    // Specifies the double click action for the table view that displays the Notes
-    [_notesTableView setTarget:self];
-    [_notesTableView setDoubleAction:@selector(rowDoubleClicked:)];
-    
     //[_subjectTitleMainView setFont:[NSFont fontWithName:@"PPETRIAL" size:50]];
 }
 
@@ -399,6 +395,19 @@
             }
             else{
                 [_deleteSubjectBtn setEnabled:YES];
+            }
+            
+            if ([selectedSubject getNoOfNotes] == 0) {
+                [_deleteNoteButton setEnabled:NO];
+            }
+            else{
+                // Specifies the double click action for the table view that displays the Notes
+                [_notesTableView setTarget:self];
+                [_notesTableView setDoubleAction:@selector(rowDoubleClicked:)];
+                
+                NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:0];
+                [_notesTableView selectRowIndexes:indexSet byExtendingSelection:NO];
+                [_deleteNoteButton setEnabled:YES];
             }
         }
     }

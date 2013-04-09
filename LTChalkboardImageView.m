@@ -10,8 +10,7 @@
 
 @implementation LTChalkboardImageView
 
-- (id)initWithFrame:(NSRect)frame
-{
+- (id)initWithFrame:(NSRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
         NSRect rect = NSMakeRect(0, 0, 930, 680);
@@ -25,9 +24,8 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
+- (void)drawRect:(NSRect)dirtyRect{
+
 }
 
 @end

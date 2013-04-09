@@ -53,43 +53,44 @@
 }
 
 -(IBAction)confirmNewNote:(id)sender{
+    
     LTAppDelegate *appDel = ((LTAppDelegate *)[[NSApplication sharedApplication] delegate]);
     
     // Create new instance of our Note entity and add it to the managedObjectContext
     Note *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"Note"
-     inManagedObjectContext:[self managedObjectContext]];
-     
+                                                  inManagedObjectContext:[self managedObjectContext]];
+    
     // Set title for the new Note
     [newNote setValue:[_noteTitle stringValue] forKey:@"title"];
-     
+    
     // Set the date
     NSDate *currentDate = [NSDate date];
     [newNote setValue:currentDate forKey:@"date"];
     
     // Add the content of the note to the Note object
     [newNote setValue:[_noteContent attributedString] forKey:@"content"];
-     
+    
     // Add the new note to the Set for the subject
     [[appDel selectedSubject] addNotesObject:newNote];
-     
+    
     NSError *error = nil;
     if (![[self managedObjectContext] save:&error]) {
         NSLog(@"Unresolved error - could not save managedObjectContext - %@", error);
     }
-     
+    
     // Clear text fields
     _noteTitle.stringValue = @"";
     _noteContent.string = @"";
-     
-    // Close the sheet
-    [NSApp endSheet:[self window]];
-    [[self window] orderOut:sender];
-
-    NSInteger subjectIndex = [[appDel sidebarOutlineView] rowForItem:[appDel selectedSubject]];
     
     [[appDel sidebarOutlineView] reloadData];
     [[appDel notesTableView] reloadData];
-     
+    
+    // Close the sheet
+    [NSApp endSheet:[self window]];
+    [[self window] orderOut:sender];
+    
+    NSInteger subjectIndex = [[appDel sidebarOutlineView] rowForItem:[appDel selectedSubject]];
+    
     // Automatically select the Subject in the sidebar
     [[appDel sidebarOutlineView] selectRowIndexes:[NSIndexSet indexSetWithIndex:subjectIndex] byExtendingSelection:NO];
     

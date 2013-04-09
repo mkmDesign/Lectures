@@ -25,7 +25,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     //  Check if the app has been launched before.  If the key 'firstLaunch' doesn't exist then it will be create and given the value of YES to indicate this is the first launch
-    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],@"firstLaunch",nil]];
+    /*[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],@"firstLaunch",nil]];
     
     // Check if this is the apps first launch
     if (! [[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
@@ -43,7 +43,23 @@
         
         // Setting userDefaults for next time - indicate that the app has been launched before
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+    }*/
+
+    NSUserDefaults  *userSettings;
+    userSettings = [NSUserDefaults standardUserDefaults];
+
+    int launchCount = [userSettings integerForKey:@"launchCount"];
+    if(launchCount == 0){
+        // Set the title for the Subject
+        [newSubject setValue:@"Quick Notes" forKey:@"title"];
+        
+        NSError *error = nil;
+        if (![_managedObjectContext save:&error]) {
+            NSLog(@"Unresolved error - could not save managedObjectContext - %@", error);
+        }
     }
+    launchCount++;
+    [userSettings setInteger: launchCount forKey:@"launchCount"];
     
     // Get all the Subjects from managedObjectContext and store them in an array
     NSFetchRequest *subjectsFetchReq = [[NSFetchRequest alloc]init];
@@ -76,8 +92,7 @@
     
     // Automatically select first Subject in the sidebar
     [_sidebarOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
-    
-    //[_subjectTitleMainView setFont:[NSFont fontWithName:@"PPETRIAL" size:50]];
+
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "mkm.Lectures" in the user's Application Support directory.
@@ -100,7 +115,8 @@
     return _managedObjectModel;
 }
 
-// Returns the persistent store coordinator for the application. This implementation creates and return a coordinator, having added the store for the application to it. (The directory for the store is created, if necessary.)
+// Returns the persistent store coordinator for the application. 
+// This implementation creates and return a coordinator, having added the store for the application to it. (The directory for the store is created, if necessary.)
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
     if (_persistentStoreCoordinator) {
@@ -377,7 +393,6 @@
 
 /***************************************SIDEBAR SHIZZLE**************************************/
 
-
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
     if ([_sidebarOutlineView selectedRow] != -1) {
         Subject *item = [_sidebarOutlineView itemAtRow:[_sidebarOutlineView selectedRow]];
@@ -397,6 +412,7 @@
                 [_deleteSubjectBtn setEnabled:YES];
             }
             
+            // Disable delete button for Notes if Subject has no Notes
             if ([selectedSubject getNoOfNotes] == 0) {
                 [_deleteNoteButton setEnabled:NO];
             }
@@ -500,12 +516,11 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
     return [[selectedSubject notes] count];
-}
+}   
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     
-    NSSet *notesForSubject = [selectedSubject notes];
-    NSArray *notes = [notesForSubject allObjects];
+    NSArray *notes = [[selectedSubject notes] allObjects];
     
     Note *note = [notes objectAtIndex:row];
     

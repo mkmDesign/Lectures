@@ -18,6 +18,5 @@
 
 @property (weak) IBOutlet NSTextField *noteTitle;
 @property (unsafe_unretained) IBOutlet NSTextView *noteContent;
-@property NSAttributedString *noteContentRT;
 
 @end

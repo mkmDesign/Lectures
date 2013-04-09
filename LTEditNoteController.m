@@ -16,8 +16,7 @@
 
 @implementation LTEditNoteController
 
-- (void)windowDidLoad
-{
+- (void)windowDidLoad{
     [super windowDidLoad];
     [_editNoteTitle setStringValue:[noteToEdit title]];
     [[_editNoteContent textStorage] setAttributedString:[noteToEdit content]];
@@ -27,13 +26,12 @@
     
     self = [super initWithWindowNibName:nibName];
     if (self) {
-        
+
         appDel = ((LTAppDelegate *)[[NSApplication sharedApplication] delegate]);
         
-        NSSet *notesForSubject = [[appDel selectedSubject] notes];
-        NSArray *notes = [notesForSubject allObjects];
-        
+        NSArray *notes = [[[appDel selectedSubject] notes] allObjects];
         noteToEdit = [notes objectAtIndex:[[appDel notesTableView] selectedRow]];
+        
     }
     
     return self;
